@@ -8,7 +8,6 @@ import SuggestedProducts from "@/components/SuggestedProducts"
 export default function HomePage() {
   return (
     <main className="bg-white text-gray-900">
-      <div className="mt-4 p-4 bg-green-500 text-white">TAILWIND ÇALIŞIYOR MU?</div>
 
       <HeroSlider />
       <FlashSaleSection />

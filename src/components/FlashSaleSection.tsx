@@ -12,8 +12,8 @@ type Product = {
 }
 
 const flashProducts: Product[] = [
-  { id: 1, name: "Lavanta Sabunu", price: 10.0, oldPrice: 20.0, image: "/images/3.jpg", sold: 100 },
-  { id: 2, name: "Lavanta Mumları", price: 15.0, oldPrice: 35.0, image: "/images/4.jpg", sold: 320 },
+  { id: 1, name: "Pizza", price: 10.0, oldPrice: 20.0, image: "/images/3.jpg", sold: 100 },
+  { id: 2, name: "Tavuk", price: 15.0, oldPrice: 35.0, image: "/images/4.jpg", sold: 320 },
   // … diğer ürünler
 ]
 

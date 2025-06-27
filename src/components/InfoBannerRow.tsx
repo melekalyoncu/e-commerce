@@ -8,10 +8,10 @@ type Info = {
 }
 
 const infos: Info[] = [
-  { id: 1, title: 'Stokta Hazır', desc: 'Hemen gönderime hazır ürünler', icon: '/images/icon-ready.png' },
-  { id: 2, title: 'Ön Sipariş',  desc: 'Ön siparişle almak isteyenler için', icon: '/images/icon-preorder.png' },
-  { id: 3, title: 'En İyi Lavantalar', desc: 'Burada bulabileceğiniz en iyi çeşitler', icon: '/images/icon-best.png' },
-  { id: 4, title: 'Ücretsiz Kargo', desc: 'Tüm ücretsiz kargo ürünleri', icon: '/images/icon-shipping.png' },
+  { id: 1, title: 'Stokta Hazır', desc: 'Hemen gönderime hazır ürünler', icon: '/images/1.jpg' },
+  { id: 2, title: 'Ön Sipariş',  desc: 'Ön siparişle almak isteyenler için', icon: '/images/4.jpg' },
+  { id: 3, title: 'En İyi Lavantalar', desc: 'Burada bulabileceğiniz en iyi çeşitler', icon: '/images/3.jpg' },
+  { id: 4, title: 'Ücretsiz Kargo', desc: 'Tüm ücretsiz kargo ürünleri', icon: '/images/2.jpg' },
 ]
 
 export default function InfoBannerRow() {
