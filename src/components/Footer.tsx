@@ -7,10 +7,11 @@ import { Phone, Mail, MapPin } from 'lucide-react'
 export default function Footer() {
   return (
     <footer className="bg-purple-600 text-white">
-      {/* Yatay genişliği sınırlamak için max-w-screen-lg ekledik, dikey padding’i küçülttük */}
-      <div className="max-w-screen-lg mx-auto px-6 py-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Grid yapısı: mobilde 1 sütun, md ve üstü 3 sütun */}
+      <div className="max-w-screen-lg mx-auto px-4 py-4 md:px-6 md:py-8 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+
         {/* 1️⃣ Hakkımızda */}
-        <div className="space-y-4">
+        <div className="space-y-2 md:space-y-4">
           <div className="flex items-center space-x-2">
             <Image
               src="/svgs/logo.svg"
@@ -18,8 +19,11 @@ export default function Footer() {
               width={32}
               height={32}
             />
-            <span className="text-xl font-bold">Aysar</span>
-          </div>
+ <span className="text-2xl font-extrabold
+                             bg-clip-text text-transparent
+                             bg-gradient-to-r from-green-400 via-blue-500 to-indigo-600">
+              Aysar
+            </span>          </div>
           <p className="text-sm leading-relaxed">
             Doğanın iyileştirici gücünü size sunuyoruz. Organik ürünlerle
             sağlıklı rutininizi zenginleştirin!
@@ -33,7 +37,7 @@ export default function Footer() {
         </div>
 
         {/* 2️⃣ İletişim */}
-        <div className="space-y-3">
+        <div className="space-y-2 md:space-y-3">
           <h3 className="text-lg font-semibold">İletişim</h3>
           <div className="flex items-center space-x-2 text-sm">
             <Phone className="w-5 h-5" />
@@ -50,7 +54,7 @@ export default function Footer() {
         </div>
 
         {/* 3️⃣ Kategori & Öne Çıkanlar */}
-        <div className="space-y-3">
+        <div className="space-y-2 md:space-y-3">
           <h3 className="text-lg font-semibold">Kategori</h3>
           <ul className="text-sm space-y-1">
             <li><a href="#" className="hover:underline">Kozmetik</a></li>
@@ -67,7 +71,7 @@ export default function Footer() {
 
       <hr className="border-gray-200" />
 
-      {/* Alt telif notu da dikey padding’i azalttık */}
+      {/* Alt telif notu */}
       <p className="text-center text-xs py-2">
         © 2025 Aysar, Tüm hakları saklıdır
       </p>

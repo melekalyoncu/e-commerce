@@ -28,15 +28,26 @@ export default function RegisterPage() {
   }
 
   // ortak input sınıfı
-const inputCls =
-  'border rounded px-3 py-2 focus:outline-purple-500 ' +
-  'font-normal input-fade'
-
+  const inputCls =
+    'w-full border rounded px-3 py-2 focus:outline-purple-500 input-fade'
 
   return (
     <>
-      {/* … sayfa başlığı + breadcrumb kısmı değişmedi */}
+      {/* ====== Başlık + Breadcrumb ====== */}
+      <div className="bg-purple-600 text-white">
+        <div className="container mx-auto px-6 py-3 flex items-center justify-between">
+          <h1 className="text-xl font-semibold">Kayıt Ol</h1>
+          <nav className="text-sm">
+            <Link href="/" className="hover:underline">
+              Anasayfa
+            </Link>
+            <span className="mx-2">/</span>
+            <span>Kayıt Ol</span>
+          </nav>
+        </div>
+      </div>
 
+      {/* ====== Form Bölümü ====== */}
       <div className="bg-gray-50 py-10">
         <div className="container mx-auto px-6">
           <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow">

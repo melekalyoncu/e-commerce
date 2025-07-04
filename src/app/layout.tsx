@@ -1,28 +1,27 @@
-// app/layout.tsx
+// app/auth/layout.tsx
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 
 export const metadata = {
-  title: 'BeeTech',
-  description: 'E-ticaret siteniz',
+  title: 'Giriş - BeeTech',
+  description: 'BeeTech Giriş Sayfası',
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="tr">
-      <body>
-        {/* tüm sayfaların ortak başlığı */}
+      <body className="flex flex-col min-h-screen">
+        {/* Navbar her sayfada */}
         <Navbar />
 
-        {/* her route’un içeriği */}
-        <main className="border-t border-gray-200">{children}</main>
-                <Footer />
+        {/* Ana içerik: flex column ve boşluğu dolduracak flex-grow */}
+        <main className="flex flex-col flex-grow bg-gray-50">
+          {children}
+        </main>
 
+        {/* Footer her zaman en altta */}
+        <Footer />
       </body>
     </html>
   )
