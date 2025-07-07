@@ -2,6 +2,7 @@
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import { CartProvider } from '../../src/context/CartContext'
 
 export const metadata = {
   title: 'Giriş - BeeTech',
@@ -11,7 +12,9 @@ export const metadata = {
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="tr">
-      <body className="flex flex-col min-h-screen">
+              <CartProvider>
+
+      <body className="flex flex-col min-h-screen text-gray-700">
         {/* Navbar her sayfada */}
         <Navbar />
 
@@ -23,6 +26,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         {/* Footer her zaman en altta */}
         <Footer />
       </body>
+              </CartProvider>
+
     </html>
   )
 }
