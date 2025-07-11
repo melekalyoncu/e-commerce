@@ -3,10 +3,12 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { CartProvider } from '../../src/context/CartContext'
+import 'mapbox-gl/dist/mapbox-gl.css';
+import '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css';
 
 export const metadata = {
-  title: 'Giriş - BeeTech',
-  description: 'BeeTech Giriş Sayfası',
+  title: 'Giriş - Aysar',
+  description: 'Aysar Giriş Sayfası',
 }
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {

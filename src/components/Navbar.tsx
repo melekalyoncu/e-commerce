@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
-import { Bell, ShoppingCart, Menu, X } from 'lucide-react'
+import { MapPin, ShoppingCart, Menu, X } from 'lucide-react'
 import { useCart } from '../../src/context/CartContext'
 
 export default function Navbar() {
@@ -81,28 +81,24 @@ export default function Navbar() {
 
             {/* İkonlar & Avatar */}
             <div className="flex items-center space-x-4">
-              <Bell className="w-5 h-5 text-gray-600 hover:text-gray-800" />
+              {/* Harita İkonu */}
+              <button
+                onClick={() => router.push('/map')}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                aria-label="Harita"
+              >
+                <MapPin className="w-5 h-5 text-gray-600 hover:text-gray-800" />
+              </button>
 
               {/* Sepet İkonu */}
               <button
                 onClick={() => router.push('/cart')}
-className="
-   relative
-   p-2                
-   rounded-full       
-   hover:bg-gray-100  
-   transition-colors 
-"                aria-label="Sepete git"
+                className="relative p-2 rounded-full hover:bg-gray-100 transition-colors"
+                aria-label="Sepete git"
               >
                 <ShoppingCart className="w-5 h-5 text-gray-600 hover:text-gray-800" />
                 {totalCount > 0 && (
-                  <span className="
-                    absolute -top-2 -right-2
-                    bg-red-500 text-white
-                    text-xs font-semibold
-                    w-5 h-5 rounded-full
-                    flex items-center justify-center
-                  ">
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-semibold w-5 h-5 rounded-full flex items-center justify-center">
                     {totalCount}
                   </span>
                 )}
@@ -129,23 +125,24 @@ className="
 
           {/* Mobile Menü Toggle & İkonlar */}
           <div className="flex lg:hidden items-center space-x-3">
-            <Bell className="w-5 h-5 text-gray-600 hover:text-gray-800" />
+            {/* Harita İkonu (Mobil) */}
+            <button
+              onClick={() => router.push('/map')}
+              className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+              aria-label="Harita"
+            >
+              <MapPin className="w-5 h-5 text-gray-600 hover:text-gray-800" />
+            </button>
 
             {/* Mobil Sepet İkonu */}
             <button
               onClick={() => router.push('/cart')}
-              className="relative"
+              className="relative p-2 rounded-full hover:bg-gray-100 transition-colors"
               aria-label="Sepete git"
             >
               <ShoppingCart className="w-5 h-5 text-gray-600 hover:text-gray-800" />
               {totalCount > 0 && (
-                <span className="
-                  absolute -top-2 -right-2
-                  bg-red-500 text-white
-                  text-xs font-semibold
-                  w-4 h-4 rounded-full
-                  flex items-center justify-center
-                ">
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-semibold w-4 h-4 rounded-full flex items-center justify-center">
                   {totalCount}
                 </span>
               )}
@@ -228,5 +225,5 @@ className="
         </div>
       </div>
     </header>
-  )
+)
 }

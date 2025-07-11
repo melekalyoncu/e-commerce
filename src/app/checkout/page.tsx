@@ -10,30 +10,48 @@ export default function CheckoutPage() {
   const total = items.reduce((sum, x) => sum + x.price * x.quantity, 0)
 
   const handleCheckout = async () => {
-    setLoading(true)
-    try {
-      const res = await fetch('/api/checkout/session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          items: items.map(i => ({
-            name: i.name,
-            price: i.price,
-            quantity: i.quantity,
-          })),
-        }),
-      })
-    const { url } = await res.json()
-      // Sepeti temizlemek istersen:
-      clearCart()
-      // Stripe Checkout’a yönlendir
-    window.location.href = url
-    } catch (err) {
-      console.error(err)
-      setLoading(false)
-      alert('Ödeme başlatılamadı.')
+  setLoading(true)
+  try {
+    const res = await fetch('/api/checkout/session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        items: items.map(i => ({
+          name:     i.name,
+          price:    i.price,
+          quantity: i.quantity,
+        })),
+      }),
+    })
+
+    console.log('⚡️ /api/checkout/session status:', res.status)
+    const data = await res.json()
+    console.log('⚡️ /api/checkout/session body:', data)
+
+    if (!res.ok) {
+     console.error('API hata:', data.error) 
+
+      throw new Error(data.error || `HTTP ${res.status}`)
     }
+
+      if (!data.url) {
+    console.error('URL yok veya boş geldi:', data)
+      throw new Error('Session URL gelmedi')
+    }
+   console.log('➡️ Yönlendiriliyor:', data.url)
+
+    clearCart()
+    window.location.href = data.url
+  } catch (err: unknown) {
+     if (err instanceof Error) {
+       alert(`Ödeme başlatılamadı: ${err.message}`)
+    } else {
+       alert('Ödeme başlatılamadı: Bilinmeyen hata')
+     }
+    setLoading(false)
   }
+}
+
 
   return (
     <div className="container mx-auto px-6 py-10">

@@ -12,20 +12,13 @@ interface Stat {
 
 const stats: Stat[] = [
   { label: 'Satıcılar', target: 100, suffix: 'k' },
-  { label: 'Müşteriler', target: 230  , suffix: 'k' },
+  { label: 'Müşteriler', target: 230, suffix: 'k' },
   { label: 'Ürünler', target: 200, suffix: 'k' },
 ]
 
-function Counter({
-  target,
-  suffix,
-  visible,
-}: {
-  target: number
-  suffix?: string
-  visible: boolean
-}) {
+function Counter({ target, suffix, visible }: { target: number; suffix?: string; visible: boolean }) {
   const [count, setCount] = useState(0)
+
   useEffect(() => {
     if (!visible) return
     let start = 0
@@ -40,8 +33,10 @@ function Counter({
         setCount(start)
       }
     }, stepTime)
+
     return () => clearInterval(timer)
   }, [visible, target])
+
   return (
     <span className="text-4xl font-bold text-green-600">
       {count}
@@ -56,17 +51,17 @@ export default function AboutPage() {
 
   useEffect(() => {
     if (!statsRef.current) return
-    const obs = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setStatsVisible(true)
-          obs.disconnect()
+          observer.disconnect()
         }
       },
       { threshold: 0.5 }
     )
-    obs.observe(statsRef.current)
-    return () => obs.disconnect()
+    observer.observe(statsRef.current)
+    return () => observer.disconnect()
   }, [])
 
   return (
@@ -76,58 +71,72 @@ export default function AboutPage() {
         <div className="container mx-auto px-6 py-3 flex items-center justify-between">
           <h1 className="text-xl font-semibold">Hakkımızda</h1>
           <nav className="text-sm">
-            <Link href="/" className="hover:underline">
-              Anasayfa
-            </Link>
+            <Link href="/" className="hover:underline">Anasayfa</Link>
             <span className="mx-2">/</span>
             <span>Hakkımızda</span>
           </nav>
         </div>
       </div>
 
-      {/* Main Content (arka plan beyaz) */}
+      {/* Main Content */}
       <div className="bg-white">
         <div className="container mx-auto px-6 py-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            {/* Metin */}
+          <div className="grid grid-cols-1 gap-8">
+            {/* Text Section */}
             <div>
-              <h2
-                className="
-                  text-3xl font-bold italic mb-4 
-                  bg-clip-text text-transparent
-                  bg-gradient-to-r from-green-400 to-blue-500
-                "
-              >
-                Aysar ile Lezzet Kapınızda
+              <h2 className="flex items-center text-3xl font-bold italic mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-green-400">
+                <Image
+                  src="/svgs/logo.svg"
+                  alt="Aysar Logo"
+                  width={32}
+                  height={32}
+                  className="inline-block mr-2 object-contain"
+                />
+                Aysar
               </h2>
-              <p className="mb-4 text-gray-700 leading-relaxed">
-                Aysar olarak amacımız, en taze ve en lezzetli yemekleri doğrudan
-                mutfağınıza taşımak. Yerel işletmelerden seçtiğimiz organik
-                malzemelerle hazırlanan seçeneklerimiz hem sağlıklı hem de tam
-                istediğiniz porsiyon kontrolünde.
+              <p className="text-lg leading-relaxed mb-4">
+                Aysar, her zevke ve ihtiyaca uygun ürünleri tek çatıda buluşturan, güvenilir bir e-ticaret platformudur.
+                Giyimden elektroniğe, ev yaşam ürünlerinden spora; binlerce farklı kategoride, her bütçeye hitap eden seçenekler sunuyoruz.
               </p>
-              <p className="mb-4 text-gray-700 leading-relaxed">
-                İster ev yapımı tarifler arıyor olun, ister özel diyet menüler –
-                Aysar’da pek çok farklı kategori ve mutfaktan yüzlerce yemek
-                seçeneği bulabilirsiniz. Restoranlarla birebir iş birliği sayesinde
-                her sipariş titizlikle paketleniyor ve hijyen kurallarına uygun
-                olarak size ulaştırılıyor.
+              <p className="text-lg leading-relaxed mb-8">
+                Amacımız, alışverişi sorunsuz ve keyifli bir deneyime dönüştürmek; siparişten teslimata kadar şeffaf,
+                hızlı ve takip edilebilir bir süreç sağlamaktır.
               </p>
-              <p className="mb-8 text-gray-700 leading-relaxed">
-                Hızlı teslimat ağımız, gerçek zamanlı takip sistemi ve 7/24 destek
-                hattımızla Aysar, lezzetli bir deneyimi mümkün olan en konforlu
-                şekilde yaşamanızı garanti ediyor.
-              </p>
-            </div>
-            {/* Logo */}
-            <div className="flex justify-center">
-              <Image
-                src="/svgs/logo.svg"
-                alt="Aysar Logo"
-                width={200}
-                height={200}
-                className="object-contain"
-              />
+
+              <section className="mb-8">
+                <h3 className="text-2xl font-semibold mb-2">Misyonumuz</h3>
+                <p className="text-lg mb-4">E-ticaretin her adımında kalite ve müşteri memnuniyetini ön planda tutmak.</p>
+                <ul className="list-disc list-inside space-y-2 text-lg">
+                  <li>En geniş ürün portföyünü ve rekabetçi fiyatları sunmak</li>
+                  <li>Şeffaf, hızlı ve izlenebilir bir alışveriş süreci işletmek</li>
+                  <li>7/24 destekle müşterilerimizin yanında olmak</li>
+                </ul>
+              </section>
+
+              <section className="mb-8">
+                <h3 className="text-2xl font-semibold mb-2">Vizyonumuz</h3>
+                <p className="text-lg leading-relaxed">
+                  Türkiye’nin en güvenilir ve tercih edilen dijital alışveriş adresi olmak;
+                  e-ticareti “her ihtiyaca tek noktadan çözüm” anlayışıyla dönüştürmek.
+                </p>
+              </section>
+
+              <section className="mb-8">
+                <h3 className="text-2xl font-semibold mb-2">Değerlerimiz</h3>
+                <ul className="list-decimal list-inside space-y-2 text-lg">
+                  <li><strong>Güven</strong>: Kişisel ve ödeme bilgileriniz güncel güvenlik protokolleriyle korunur.</li>
+                  <li><strong>Hız</strong>: Teslimatlarınızı 24–48 saat içinde kapınıza ulaştırıyoruz.</li>
+                  <li><strong>Açıklık</strong>: Fiyat, stok ve kargo süreçlerimiz baştan sona açıktır.</li>
+                  <li><strong>Müşteri Odaklılık</strong>: İhtiyaçlarınızı dinler, çözümler sunar ve memnuniyetinizi önceleriz.</li>
+                </ul>
+              </section>
+
+              {/* Call to Action */}
+              <div className="mt-8">
+                <Link href="/products" className="inline-block px-6 py-3 bg-purple-600 text-white font-semibold rounded hover:bg-purple-700 transition">
+                  Ürünlerimizi Keşfedin
+                </Link>
+              </div>
             </div>
           </div>
 
@@ -141,25 +150,19 @@ export default function AboutPage() {
             ))}
           </div>
 
-          {/* Features */}
+          {/* Features Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
             {[
-              { title: 'Taze & Organik', subtitle: 'Doğrudan yerel üreticiden' },
-              { title: 'Hızlı Teslimat', subtitle: '30 dakikada kapınızda' },
-              { title: '7/24 Destek', subtitle: 'Her daim yanınızdayız' },
-              { title: 'Güvenli Ödeme', subtitle: 'Tüm kartlara uygun' },
+              { title: 'Taze & Organik', subtitle: 'Yerel üreticiden direkt' },
+              { title: 'Hızlı Teslimat', subtitle: '24–48 saatte kapınızda' },
+              { title: '7/24 Destek', subtitle: 'Her zaman yanınızdayız' },
+              { title: 'Güvenli Ödeme', subtitle: 'Tüm kart ve cüzdanlara uygun' },
             ].map((f) => (
               <div
                 key={f.title}
-                className="
-                  bg-white p-6 rounded-lg 
-                  shadow-md hover:shadow-lg 
-                  transform hover:-translate-y-1 
-                  transition-shadow duration-200 
-                  text-center
-                "
+                className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-1 transition duration-200 text-center"
               >
-                <h3 className="mb-2 text-gray-400">{f.title}</h3>
+                <h4 className="mb-2 text-lg font-medium text-gray-700">{f.title}</h4>
                 <p className="text-sm text-gray-600">{f.subtitle}</p>
               </div>
             ))}
