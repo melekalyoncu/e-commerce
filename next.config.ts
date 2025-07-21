@@ -2,7 +2,10 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['cdn.dummyjson.com'],
+    domains: [
+            "lh3.googleusercontent.com",
+      'cdn.dummyjson.com'
+    ],
   },
 
   webpack(config, { isServer }) {

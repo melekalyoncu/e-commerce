@@ -1,35 +1,25 @@
-// app/auth/layout.tsx
-import './globals.css'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import { CartProvider } from '../../src/context/CartContext'
-import 'mapbox-gl/dist/mapbox-gl.css';
-import '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css';
+// src/app/layout.tsx
+import "./globals.css";
+import Providers from "./Providers";   
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { ReactNode } from "react";
 
 export const metadata = {
-  title: 'Giriş - Aysar',
-  description: 'Aysar Giriş Sayfası',
-}
+  title: "My E-Commerce",
+  description: "…",
+};
 
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="tr">
-              <CartProvider>
-
       <body className="flex flex-col min-h-screen text-gray-700">
-        {/* Navbar her sayfada */}
-        <Navbar />
-
-        {/* Ana içerik: flex column ve boşluğu dolduracak flex-grow */}
-        <main className="flex flex-col flex-grow bg-gray-50">
-          {children}
-        </main>
-
-        {/* Footer her zaman en altta */}
-        <Footer />
+        <Providers>
+          <Navbar />
+          <main className="flex-grow bg-gray-50">{children}</main>
+          <Footer />
+        </Providers>
       </body>
-              </CartProvider>
-
     </html>
-  )
+  );
 }
