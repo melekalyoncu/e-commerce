@@ -1,0 +1,8 @@
+node_modules
+.next
+.git
+.DS_Store
+docker-compose.yml
+!.eslintrc.json
+!.eslintignore
+!next.config.mjs

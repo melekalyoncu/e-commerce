@@ -12,7 +12,6 @@ if (!stripeSecretKey) {
 
 // 2) Stripe örneğini oluştur
 const stripe = new Stripe(stripeSecretKey, {
-  apiVersion: '2025-06-30.basil',
 });
 
 interface Item {
