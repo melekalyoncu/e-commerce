@@ -13,12 +13,14 @@
     "@prisma/client": "^6.12.0",
     "contentful": "^11.7.6",
     "leaflet": "^1.9.4",
+    "lucide-react": "^0.544.0",
     "mapbox-gl": "^3.13.0",
     "next": "15.3.4",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-leaflet": "^5.0.0"
+    "react-leaflet": "^5.0.0",
+    "stripe": "^18.5.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
