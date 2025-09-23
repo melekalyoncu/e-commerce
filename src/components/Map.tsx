@@ -1,27 +1,23 @@
-// src/components/Map.tsx
-'use client';
+'use client'
 
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png'
+import markerIcon from 'leaflet/dist/images/marker-icon.png'
+import markerShadow from 'leaflet/dist/images/marker-shadow.png'
 
-// Next.js, require()’i kısıtladığı için aşağıdaki import’ları kullanalım:
-import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
-import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-
-// Default icon ayarları:
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
   iconUrl: markerIcon,
   shadowUrl: markerShadow,
-});
+})
 
-interface MapProps {
-  latitude: number;
-  longitude: number;
-  zoom?: number;
-  style?: React.CSSProperties;
+export interface MapProps {
+  latitude: number
+  longitude: number
+  zoom?: number
+  style?: React.CSSProperties
 }
 
 export function Map({
@@ -40,5 +36,5 @@ export function Map({
         <Popup>Buraya tıklayın!</Popup>
       </Marker>
     </MapContainer>
-  );
+  )
 }

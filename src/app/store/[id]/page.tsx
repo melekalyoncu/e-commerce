@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import ClientMap from './ClientMap'
+import StoreMapWrapper from '@/components/StoreMapWrapper'
 
 export const revalidate = 60
 
@@ -14,13 +14,13 @@ interface Store {
 }
 
 async function getStore(id: string): Promise<Store | null> {
+  // gerçek projede DB/API çağrısı yapın
   return { id, name: 'Mağaza X', lat: 41.01, lng: 28.97 }
 }
 
 const isUUID = (s: string) =>
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(s)
 
-// Next.js 15’te params/searchParams Promise olabildiği için tipler Promise<...>
 export async function generateMetadata({
   params,
 }: {
@@ -41,7 +41,6 @@ export default async function Page({
   params: Promise<Params>
 }) {
   const { id } = await params
-
   if (!isUUID(id)) notFound()
 
   const store = await getStore(id)
@@ -50,7 +49,9 @@ export default async function Page({
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">{store.name}</h1>
-      <ClientMap lat={store.lat} lng={store.lng} zoom={15} />
+
+      {/* DİKKAT: latitude / longitude prop adları */}
+      <StoreMapWrapper latitude={store.lat} longitude={store.lng} zoom={15} />
     </div>
   )
 }
