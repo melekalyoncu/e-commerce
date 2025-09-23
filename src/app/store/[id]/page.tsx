@@ -3,8 +3,7 @@ import type { Metadata } from "next";
 import StoreMapWrapper from "@/components/StoreMapWrapper";
 
 type StorePageProps = {
-  params: { id: string };                      
-  searchParams?: Record<string, string | string[] | undefined>; 
+  params: { id: string };
 };
 
 interface Store {
@@ -21,7 +20,7 @@ async function getStore(id: string): Promise<Store | null> {
 }
 
 export async function generateMetadata({ params }: StorePageProps): Promise<Metadata> {
-  const { id } = params;                       
+  const { id } = params;
   const store = await getStore(id);
   if (!store) return { title: "Mağaza Bulunamadı" };
   return { title: `${store.name} | Store` };
@@ -31,7 +30,7 @@ const isUUID = (s: string) =>
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(s);
 
 export default async function StorePage({ params }: StorePageProps) {
-  const { id } = params;                       
+  const { id } = params;
 
   if (!isUUID(id)) notFound();
 
