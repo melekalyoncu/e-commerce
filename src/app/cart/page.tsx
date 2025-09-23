@@ -4,7 +4,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useCart } from '../../../src/context/CartContext'
+import { useCart } from '@/context/CartContext'
 import { useRouter } from 'next/navigation'
 
 const MIN_TOTAL_TL = 20.0  // Ödeme için izin verilen en düşük tutar

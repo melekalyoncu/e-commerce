@@ -2,9 +2,9 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import StoreMapWrapper from "@/components/StoreMapWrapper";
 
-type StorePageProps = {
-  params: { id: string };
-};
+export const revalidate = 60;
+
+type Params = { id: string };
 
 interface Store {
   id: string;
@@ -13,14 +13,14 @@ interface Store {
   lng: number;
 }
 
-export const revalidate = 60;
-
 async function getStore(id: string): Promise<Store | null> {
   return { id, name: "Mağaza X", lat: 41.01, lng: 28.97 };
 }
 
-export async function generateMetadata({ params }: StorePageProps): Promise<Metadata> {
-  const { id } = params;
+export async function generateMetadata(
+  { params }: { params: Promise<Params> }
+): Promise<Metadata> {
+  const { id } = await params;
   const store = await getStore(id);
   if (!store) return { title: "Mağaza Bulunamadı" };
   return { title: `${store.name} | Store` };
@@ -29,8 +29,10 @@ export async function generateMetadata({ params }: StorePageProps): Promise<Meta
 const isUUID = (s: string) =>
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(s);
 
-export default async function StorePage({ params }: StorePageProps) {
-  const { id } = params;
+export default async function Page(
+  { params }: { params: Promise<Params> }
+) {
+  const { id } = await params;
 
   if (!isUUID(id)) notFound();
 

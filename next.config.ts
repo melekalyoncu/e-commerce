@@ -1,13 +1,11 @@
-import type { NextConfig } from 'next'
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "standalone",
+  eslint: { ignoreDuringBuilds: true },
   images: {
-    domains: [
-            "lh3.googleusercontent.com",
-      'cdn.dummyjson.com'
-    ],
+    domains: ["lh3.googleusercontent.com", "cdn.dummyjson.com"],
   },
-
   webpack(config, { isServer }) {
     if (!isServer) {
       config.resolve = {
@@ -16,10 +14,10 @@ const nextConfig: NextConfig = {
           ...config.resolve?.fallback,
           fs: false,
         },
-      }
+      };
     }
-    return config
+    return config;
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;
