@@ -14,7 +14,6 @@ interface Store {
 }
 
 async function getStore(id: string): Promise<Store | null> {
-  // gerçek projede DB/API çağrısı yapın
   return { id, name: 'Mağaza X', lat: 41.01, lng: 28.97 }
 }
 
@@ -50,7 +49,6 @@ export default async function Page({
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">{store.name}</h1>
 
-      {/* DİKKAT: latitude / longitude prop adları */}
       <StoreMapWrapper latitude={store.lat} longitude={store.lng} zoom={15} />
     </div>
   )
