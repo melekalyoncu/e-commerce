@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 
 const Map = dynamic(() => import("@/components/Map").then(m => m.Map), {
   ssr: false,
+  loading: () => <div>Harita yükleniyor…</div>,
 });
 
 interface Props {
