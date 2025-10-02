@@ -1,17 +1,15 @@
 import LoginClient from "./LoginClient";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"; 
 
-export default function Page({
+export default async function Page({
   searchParams,
 }: {
-  searchParams?: { callbackUrl?: string };
+  searchParams?: Promise<{ callbackUrl?: string }>;
 }) {
+  const sp = await searchParams; // Promise'i çöz
   const callbackUrl =
-    typeof searchParams?.callbackUrl === "string" &&
-      searchParams.callbackUrl.length > 0
-      ? searchParams.callbackUrl
-      : "/";
+    (sp?.callbackUrl && sp.callbackUrl.length > 0 ? sp.callbackUrl : "/");
 
   return <LoginClient callbackUrl={callbackUrl} />;
 }
