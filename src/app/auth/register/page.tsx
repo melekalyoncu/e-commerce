@@ -56,7 +56,7 @@ export default function RegisterPage() {
   });
 
   const onSubmit = async (values: FormValues) => {
-    // 1) Kayıt isteği (kendi API’n)
+    // 1) Kayıt isteği 
     const res = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -78,7 +78,7 @@ export default function RegisterPage() {
     });
 
     if (signInRes?.ok) {
-      router.push('/'); // anasayfaya
+      router.push('/'); 
       return;
     }
 

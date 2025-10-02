@@ -37,7 +37,7 @@ export default function LoginPage() {
       redirect: false,
       email: form.email,
       password: form.password,
-      callbackUrl, 
+      callbackUrl,
     });
 
     setLoading(false);
@@ -140,7 +140,7 @@ export default function LoginPage() {
 
           <div className="mt-6 border-t pt-6 flex justify-center gap-4">
             <button type="button" onClick={() => signIn("google", { callbackUrl })} className="p-2 hover:opacity-80">
-              <Image src="/images/google.png" alt="Google ile Giriş" width={40} height={40} />
+              <Image src="/svgs/google.svg" alt="" width={30} height={30} />
             </button>
             <button type="button" onClick={() => signIn("github", { callbackUrl })} className="p-2 hover:opacity-80">
               <Image src="/images/github.jpeg" alt="GitHub ile Giriş" width={40} height={40} />

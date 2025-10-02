@@ -1,6 +1,10 @@
 import type { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { verifyUser } from "@/lib/mock-users";
+import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
+import FacebookProvider from "next-auth/providers/facebook";
+
+import { verifyUser, MockUser } from "@/lib/mock-users";
 
 export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
@@ -12,12 +16,15 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const email = credentials?.email ?? "";
-        const password = credentials?.password ?? "";
-        if (!email || !password) return null;
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("MissingCredentials");
+        }
 
-        const user = await verifyUser(email, password);
-        if (!user) return null;
+        const user = await verifyUser(credentials.email, credentials.password);
+
+        if (!user) {
+          throw new Error("Kayıtlı kullanıcı bulunamadı veya şifre hatalı");
+        }
 
         return {
           id: user.id,
@@ -27,16 +34,32 @@ export const authOptions: NextAuthOptions = {
         };
       },
     }),
+    // Google
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    // GitHub
+    GitHubProvider({
+      clientId: process.env.GITHUB_ID!,
+      clientSecret: process.env.GITHUB_SECRET!,
+    }),
+    // Facebook
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_ID!,
+      clientSecret: process.env.FACEBOOK_SECRET!,
+    }),
   ],
   pages: {
-    signIn: "/auth/login", 
+    signIn: "/auth/login",
   },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.name = user.name;
-        token.email = user.email;
-        (token as Record<string, unknown>).picture = user.image;
+        const u = user as MockUser;
+        token.name = u.name;
+        token.email = u.email;
+        (token as Record<string, unknown>).picture = u.image;
       }
       return token;
     },

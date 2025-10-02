@@ -1,4 +1,3 @@
-// components/Navbar.tsx
 "use client";
 
 import { useState } from "react";
@@ -28,7 +27,15 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="bg-white shadow-sm">
+    <header
+      className="
+    sticky top-0 z-50
+    bg-white
+    shadow-[0_8px_24px_-18px_rgba(124,58,237,0.45)]
+    after:content-[''] after:absolute after:inset-x-0 after:bottom-0 after:h-[3px]
+    after:bg-gradient-to-r after:from-transparent after:via-purple-600/90 after:to-transparent
+  "
+    >
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -64,7 +71,7 @@ export default function Navbar() {
               ))}
             </nav>
 
-            {/* Harita – HERKES görür */}
+            {/* Harita*/}
             <button
               onClick={() => router.push("/map")}
               className="p-2 rounded-full hover:bg-gray-100 transition-colors"
@@ -73,7 +80,7 @@ export default function Navbar() {
               <MapPin className="w-5 h-5 text-gray-600 hover:text-gray-800" />
             </button>
 
-            {/* Sepet – HERKES görür */}
+            {/* Sepet*/}
             <button
               onClick={() => router.push("/cart")}
               className="relative p-2 rounded-full hover:bg-gray-100 transition-colors"
@@ -92,7 +99,7 @@ export default function Navbar() {
               <div className="flex items-center space-x-2">
                 <div className="w-10 h-10 rounded-full overflow-hidden">
                   <Image
-                    src={session.user?.image || "/images/default-avatar.png"}
+                    src={session.user?.image || "/images/avatar.png"}
                     alt={session.user?.name || "User"}
                     width={40}
                     height={40}

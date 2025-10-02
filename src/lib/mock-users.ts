@@ -32,7 +32,7 @@ export async function createUser(params: {
     name: `${firstName} ${lastName}`.trim(),
     email,
     passwordHash,
-    image: "/images/default-avatar.png",
+    image: "/images/avatar.png",
   };
   store.push(user);
   return user;

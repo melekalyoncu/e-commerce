@@ -37,7 +37,6 @@ const posts: Post[] = [
     cover: '/images/3.jpg',
     date: '2025-06-05',
   },
-  // Daha fazla post ekleyebilirsin…
 ]
 
 export default function BlogPage() {
