@@ -1,35 +1,95 @@
-// app/auth/register/page.tsx
-'use client'
+'use client';
 
-import Link from 'next/link'
-import Image from 'next/image'
-import { useState } from 'react'
+import Link from 'next/link';
+import Image from 'next/image';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Eye, EyeOff } from 'lucide-react';
+
+const schema = z.object({
+  firstName: z.string().min(2, 'En az 2 karakter'),
+  lastName: z.string().min(2, 'En az 2 karakter'),
+  email: z.string().email('Geçerli bir e-posta girin'),
+  phone: z.string()
+    .min(10, 'Telefon numarası çok kısa')
+    .regex(/^\+?\d{10,15}$/, 'Sadece rakam, opsiyonel + ve 10-15 hane'),
+  address: z.string().min(5, 'Adres çok kısa'),
+  country: z.string().min(2, 'Ülke zorunlu'),
+  city: z.string().min(2, 'Şehir zorunlu'),
+  password: z.string()
+    .min(6, 'En az 6 karakter')
+    .regex(/^(?=.*[A-Za-z])(?=.*\d).{6,}$/, 'Harf ve rakam içermeli'),
+  confirm: z.string()
+}).refine(d => d.password === d.confirm, {
+  message: 'Şifreler eşleşmiyor',
+  path: ['confirm'],
+});
+
+type FormValues = z.infer<typeof schema>;
 
 export default function RegisterPage() {
-  const [form, setForm] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    address: '',
-    country: '',
-    city: '',
-    password: '',
-    confirm: '',
-  })
+  const router = useRouter();
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      address: '',
+      country: '',
+      city: '',
+      password: '',
+      confirm: '',
+    },
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log(form)
-  }
+  const onSubmit = async (values: FormValues) => {
+    // 1) Kayıt isteği (kendi API’n)
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(values),
+    });
 
-  // ortak input sınıfı
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.error || 'Kayıt başarısız');
+      return;
+    }
+
+    // 2) Otomatik giriş (Credentials Provider varsa)
+    const signInRes = await signIn('credentials', {
+      redirect: false,
+      email: values.email,
+      password: values.password,
+      callbackUrl: '/',
+    });
+
+    if (signInRes?.ok) {
+      router.push('/'); // anasayfaya
+      return;
+    }
+
+    // Credentials yoksa kullanıcıyı login sayfasına yönlendir
+    router.push('/auth/login?callbackUrl=%2F');
+  };
+
   const inputCls =
-    'w-full border rounded px-3 py-2 focus:outline-purple-500 input-fade'
+    'w-full border rounded px-3 py-2 focus:outline-purple-500 input-fade';
+
+  const invalid = 'border-red-500 focus:outline-red-500';
 
   return (
     <>
@@ -38,9 +98,7 @@ export default function RegisterPage() {
         <div className="container mx-auto px-6 py-3 flex items-center justify-between">
           <h1 className="text-xl font-semibold">Kayıt Ol</h1>
           <nav className="text-sm">
-            <Link href="/" className="hover:underline">
-              Anasayfa
-            </Link>
+            <Link href="/" className="hover:underline">Anasayfa</Link>
             <span className="mx-2">/</span>
             <span>Kayıt Ol</span>
           </nav>
@@ -53,174 +111,167 @@ export default function RegisterPage() {
           <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow">
             {/* logo */}
             <div className="flex justify-center mb-6">
-              <Image
-                src="/svgs/logo.svg"
-                alt="Aysar Logo"
-                width={76}
-                height={76}
-              />
+              <Image src="/svgs/logo.svg" alt="Aysar Logo" width={76} height={76} />
             </div>
 
             <form
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmit(onSubmit)}
               className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+              noValidate
             >
               {/* İsim / Soyisim */}
               <label className="flex flex-col">
-                <span className="text-sm font-medium mb-1 text-gray-700">
-                  İsim*
-                </span>
+                <span className="text-sm font-medium mb-1 text-gray-700">İsim*</span>
                 <input
-                  name="firstName"
-                  value={form.firstName}
-                  onChange={handleChange}
+                  {...register('firstName')}
                   type="text"
                   placeholder="İsim Giriniz"
-                  className={inputCls}
-                  required
+                  className={`${inputCls} ${errors.firstName ? invalid : ''}`}
+                  aria-invalid={!!errors.firstName}
                 />
+                {errors.firstName && <span className="text-xs text-red-600 mt-1">{errors.firstName.message}</span>}
               </label>
+
               <label className="flex flex-col">
-                <span className="text-sm font-medium mb-1 text-gray-700">
-                  Soyisim*
-                </span>
+                <span className="text-sm font-medium mb-1 text-gray-700">Soyisim*</span>
                 <input
-                  name="lastName"
-                  value={form.lastName}
-                  onChange={handleChange}
+                  {...register('lastName')}
                   type="text"
                   placeholder="Soyisim Giriniz"
-                  className={inputCls}
-                  required
+                  className={`${inputCls} ${errors.lastName ? invalid : ''}`}
+                  aria-invalid={!!errors.lastName}
                 />
+                {errors.lastName && <span className="text-xs text-red-600 mt-1">{errors.lastName.message}</span>}
               </label>
 
               {/* Email / Telefon */}
               <label className="flex flex-col">
-                <span className="text-sm font-medium mb-1 text-gray-700">
-                  Email*
-                </span>
+                <span className="text-sm font-medium mb-1 text-gray-700">Email*</span>
                 <input
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
+                  {...register('email')}
                   type="email"
                   placeholder="Email Giriniz"
-                  className={inputCls}
-                  required
+                  autoComplete="email"
+                  className={`${inputCls} ${errors.email ? invalid : ''}`}
+                  aria-invalid={!!errors.email}
                 />
+                {errors.email && <span className="text-xs text-red-600 mt-1">{errors.email.message}</span>}
               </label>
+
               <label className="flex flex-col">
-                <span className="text-sm font-medium mb-1 text-gray-700">
-                  Telefon No*
-                </span>
+                <span className="text-sm font-medium mb-1 text-gray-700">Telefon No*</span>
                 <input
-                  name="phone"
-                  value={form.phone}
-                  onChange={handleChange}
+                  {...register('phone')}
                   type="tel"
                   placeholder="Numara Giriniz"
-                  className={inputCls}
-                  required
+                  autoComplete="tel"
+                  className={`${inputCls} ${errors.phone ? invalid : ''}`}
+                  aria-invalid={!!errors.phone}
                 />
+                {errors.phone && <span className="text-xs text-red-600 mt-1">{errors.phone.message}</span>}
               </label>
 
               {/* Adres */}
               <label className="flex flex-col sm:col-span-2">
-                <span className="text-sm font-medium mb-1 text-gray-700">
-                  Adres*
-                </span>
+                <span className="text-sm font-medium mb-1 text-gray-700">Adres*</span>
                 <input
-                  name="address"
-                  value={form.address}
-                  onChange={handleChange}
+                  {...register('address')}
                   type="text"
                   placeholder="Adres"
-                  className={inputCls}
-                  required
+                  autoComplete="street-address"
+                  className={`${inputCls} ${errors.address ? invalid : ''}`}
+                  aria-invalid={!!errors.address}
                 />
+                {errors.address && <span className="text-xs text-red-600 mt-1">{errors.address.message}</span>}
               </label>
 
-              {/* Ülke / Şehir (read-only) */}
+              {/* Ülke / Şehir */}
               <label className="flex flex-col">
-                <span className="text-sm font-medium mb-1 text-gray-700">
-                  Ülke*
-                </span>
+                <span className="text-sm font-medium mb-1 text-gray-700">Ülke*</span>
                 <input
-                  name="country"
-                  value={form.country}
-                  onChange={handleChange}
+                  {...register('country')}
                   type="text"
                   placeholder="Ülke"
-                  className={inputCls + ' bg-white cursor-not-allowed'}
-                  readOnly
-                  required
+                  className={`${inputCls} ${errors.country ? invalid : ''}`}
+                  aria-invalid={!!errors.country}
                 />
-              </label>
-              <label className="flex flex-col">
-                <span className="text-sm font-medium mb-1 text-gray-700">
-                  Şehir*
-                </span>
-                <input
-                  name="city"
-                  value={form.city}
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="Şehir"
-                  className={inputCls + ' bg-white cursor-not-allowed'}
-                  readOnly
-                  required
-                />
+                {errors.country && <span className="text-xs text-red-600 mt-1">{errors.country.message}</span>}
               </label>
 
-              {/* Şifre / Şifre Tekrar */}
               <label className="flex flex-col">
-                <span className="text-sm font-medium mb-1 text-gray-700">
-                  Şifre*
-                </span>
+                <span className="text-sm font-medium mb-1 text-gray-700">Şehir*</span>
                 <input
-                  name="password"
-                  value={form.password}
-                  onChange={handleChange}
-                  type="password"
-                  placeholder="Şifre Giriniz"
-                  className={inputCls}
-                  required
+                  {...register('city')}
+                  type="text"
+                  placeholder="Şehir"
+                  className={`${inputCls} ${errors.city ? invalid : ''}`}
+                  aria-invalid={!!errors.city}
                 />
+                {errors.city && <span className="text-xs text-red-600 mt-1">{errors.city.message}</span>}
               </label>
+
+              {/* Şifre / Şifre Tekrar + göz ikonu */}
               <label className="flex flex-col">
-                <span className="text-sm font-medium mb-1 text-gray-700">
-                  Şifre Tekrar*
-                </span>
-                <input
-                  name="confirm"
-                  value={form.confirm}
-                  onChange={handleChange}
-                  type="password"
-                  placeholder="Şifre Tekrar"
-                  className={inputCls + ' bg-white cursor-not-allowed'}
-                  readOnly
-                  required
-                />
+                <span className="text-sm font-medium mb-1 text-gray-700">Şifre*</span>
+                <div className="relative">
+                  <input
+                    {...register('password')}
+                    type={showPass ? 'text' : 'password'}
+                    placeholder="Şifre Giriniz"
+                    autoComplete="new-password"
+                    className={`${inputCls} pr-10 ${errors.password ? invalid : ''}`}
+                    aria-invalid={!!errors.password}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPass(s => !s)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-500 hover:text-gray-700"
+                    aria-label={showPass ? 'Şifreyi gizle' : 'Şifreyi göster'}
+                  >
+                    {showPass ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+                {errors.password && <span className="text-xs text-red-600 mt-1">{errors.password.message}</span>}
+              </label>
+
+              <label className="flex flex-col">
+                <span className="text-sm font-medium mb-1 text-gray-700">Şifre Tekrar*</span>
+                <div className="relative">
+                  <input
+                    {...register('confirm')}
+                    type={showConfirm ? 'text' : 'password'}
+                    placeholder="Şifre Tekrar"
+                    autoComplete="new-password"
+                    className={`${inputCls} pr-10 ${errors.confirm ? invalid : ''}`}
+                    aria-invalid={!!errors.confirm}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirm(s => !s)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-500 hover:text-gray-700"
+                    aria-label={showConfirm ? 'Şifreyi gizle' : 'Şifreyi göster'}
+                  >
+                    {showConfirm ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+                {errors.confirm && <span className="text-xs text-red-600 mt-1">{errors.confirm.message}</span>}
               </label>
 
               {/* Gönder */}
               <div className="sm:col-span-2 flex justify-end mt-4">
                 <button
                   type="submit"
-                  className="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600 transition"
+                  disabled={isSubmitting}
+                  className="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600 transition disabled:opacity-60"
                 >
-                  Kaydet
+                  {isSubmitting ? 'Kaydediliyor…' : 'Kaydet'}
                 </button>
               </div>
 
               {/* Zaten hesabın var mı? */}
               <p className="sm:col-span-2 text-right text-sm text-gray-700">
                 Hesabın zaten var mı?{' '}
-                <Link
-                  href="/auth/login"
-                  className="text-purple-700 hover:underline"
-                >
+                <Link href="/auth/login" className="text-purple-700 hover:underline">
                   Giriş Yap
                 </Link>
               </p>
@@ -229,5 +280,5 @@ export default function RegisterPage() {
         </div>
       </div>
     </>
-  )
+  );
 }

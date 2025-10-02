@@ -12,7 +12,7 @@ export default function CheckoutPage() {
   const handleCheckout = async () => {
   setLoading(true)
   try {
-    const res = await fetch('/api/checkout/session', {
+    const res = await fetch('/checkout/session', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -24,9 +24,7 @@ export default function CheckoutPage() {
       }),
     })
 
-    console.log('⚡️ /api/checkout/session status:', res.status)
     const data = await res.json()
-    console.log('⚡️ /api/checkout/session body:', data)
 
     if (!res.ok) {
      console.error('API hata:', data.error) 

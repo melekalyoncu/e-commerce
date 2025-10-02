@@ -1,11 +1,11 @@
-// src/app/layout.tsx
 import "./globals.css";
 import Providers from "./Providers";   
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ReactNode } from "react";
+import { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "My E-Commerce",
   description: "…",
 };

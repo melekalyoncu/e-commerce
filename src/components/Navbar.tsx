@@ -56,82 +56,67 @@ export default function Navbar() {
                 <Link
                   key={l.href}
                   href={l.href}
-                  className={
-                    path === l.href
-                      ? "text-green-600 font-semibold"
-                      : "text-gray-700 hover:text-green-600"
-                  }
+                  className={path === l.href ? "text-green-600 font-semibold" : "text-gray-700 hover:text-green-600"}
+                  aria-current={path === l.href ? "page" : undefined}
                 >
                   {l.label}
                 </Link>
               ))}
             </nav>
 
-            {/* Eğer oturum açıksa kullanıcı avatar+isim, değilse Giriş/Kayıt */}
+            {/* Harita – HERKES görür */}
+            <button
+              onClick={() => router.push("/map")}
+              className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+              aria-label="Harita"
+            >
+              <MapPin className="w-5 h-5 text-gray-600 hover:text-gray-800" />
+            </button>
+
+            {/* Sepet – HERKES görür */}
+            <button
+              onClick={() => router.push("/cart")}
+              className="relative p-2 rounded-full hover:bg-gray-100 transition-colors"
+              aria-label="Sepete git"
+            >
+              <ShoppingCart className="w-5 h-5 text-gray-600 hover:text-gray-800" />
+              {totalCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-semibold w-5 h-5 rounded-full flex items-center justify-center">
+                  {totalCount}
+                </span>
+              )}
+            </button>
+
+            {/* Oturum alanı */}
             {status === "authenticated" ? (
-              <div className="flex items-center space-x-4">
-                {/* Harita */}
-                <button
-                  onClick={() => router.push("/map")}
-                  className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-                  aria-label="Harita"
-                >
-                  <MapPin className="w-5 h-5 text-gray-600 hover:text-gray-800" />
-                </button>
-                {/* Sepet */}
-                <button
-                  onClick={() => router.push("/cart")}
-                  className="relative p-2 rounded-full hover:bg-gray-100 transition-colors"
-                  aria-label="Sepete git"
-                >
-                  <ShoppingCart className="w-5 h-5 text-gray-600 hover:text-gray-800" />
-                  {totalCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-semibold w-5 h-5 rounded-full flex items-center justify-center">
-                      {totalCount}
-                    </span>
-                  )}
-                </button>
-                {/* Kullanıcı */}
-                <div className="flex items-center space-x-2">
-                  <div className="w-10 h-10 rounded-full overflow-hidden">
-                    <Image
-                      src={session.user?.image || "/images/default-avatar.png"}
-                      alt={session.user?.name || "User"}
-                      width={40}
-                      height={40}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                  <div className="text-sm">
-                    <p className="font-medium text-gray-900">
-                      {session.user?.name}
-                    </p>
-                    <button
-                      onClick={() => signOut({ callbackUrl: "/" })}
-                      className="flex items-center text-xs text-red-500 hover:underline"
-                    >
-                      <LogOut className="w-4 h-4 mr-1" /> Çıkış Yap
-                    </button>
-                  </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-10 h-10 rounded-full overflow-hidden">
+                  <Image
+                    src={session.user?.image || "/images/default-avatar.png"}
+                    alt={session.user?.name || "User"}
+                    width={40}
+                    height={40}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+                <div className="text-sm">
+                  <p className="font-medium text-gray-900">{session.user?.name}</p>
+                  <button
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                    className="flex items-center text-xs text-red-500 hover:underline"
+                  >
+                    <LogOut className="w-4 h-4 mr-1" /> Çıkış Yap
+                  </button>
                 </div>
               </div>
             ) : (
               <div className="flex items-center space-x-4">
-                <Link
-                  href="/auth/login"
-                  className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600"
-                >
-                  Giriş
-                </Link>
-                <Link
-                  href="/auth/register"
-                  className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600"
-                >
-                  Kayıt Ol
-                </Link>
+                <Link href="/auth/login" className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600">Giriş</Link>
+                <Link href="/auth/register" className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600">Kayıt Ol</Link>
               </div>
             )}
           </div>
+
 
           {/* Mobile Menü Toggle & İkonlar */}
           <div className="flex lg:hidden items-center space-x-3">
@@ -157,23 +142,6 @@ export default function Navbar() {
                 </span>
               )}
             </button>
-
-            {/* Avatar küçük */}
-            {status === "authenticated" ? (
-              <div className="w-8 h-8 rounded-full overflow-hidden">
-                <Image
-                  src={session.user?.image || "/images/default-avatar.png"}
-                  alt={session.user?.name || "User"}
-                  width={32}
-                  height={32}
-                  className="object-cover w-full h-full"
-                />
-              </div>
-            ) : (
-              <button onClick={() => setOpen(false)} aria-label="Menü">
-                <Menu className="w-6 h-6 text-gray-800" />
-              </button>
-            )}
 
             {/* Menü Aç/Kapat */}
             <button onClick={() => setOpen((o) => !o)} aria-label="Menüyü Aç/Kapat">
